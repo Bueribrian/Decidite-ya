@@ -7,7 +7,19 @@ constructor(){
   decisions:[]
  }
 }
-
+deleteOne = (e)=>{
+  let decisionsFiltered = this.state.decisions.filter(d=>{
+    console.log(e.target.parentNode)
+    if(d===e.target.parentNode.textContent.slice(0, -2)){
+      return null
+    }else{
+      return d
+    }
+  })
+  this.setState({
+    decisions:decisionsFiltered
+  })
+}
 addDecision =(e)=>{
  let valor = e.target.value
  if(e.key === 'Enter'){
@@ -24,7 +36,7 @@ decide = ()=>{
  if(this.state.decisions.length > 0){
   let decisionsInput = Array.from(document.querySelectorAll('li'))
   decisionsInput.forEach(d=>d.style.color='black')
- decisionsInput[Math.floor(Math.random()*decisionsInput.length)].style.color='red'
+ decisionsInput[Math.floor(Math.random()*decisionsInput.length)].style.color='green'
  }else{
   alert('El dios maquina necesita opciones para elegir')
  }
@@ -37,9 +49,9 @@ destroyAll = ()=>{
 render() {
    return (
   
-    <>
+    <div className='container'>
      <div className="nes-container with-title is-centered p-3">
-         <h1 className="title">I can not decide</h1>
+         <h1 className="title">No puedo decidir</h1>
          <p>Deja que la maquina decida por vos</p>
      </div>
      <div style={{ "display": "flex", "justifyContent": "center","marginBottom":"1rem" }}>
@@ -52,13 +64,16 @@ render() {
          <div className="lists">
           <h2>Tus opciones</h2>
         <ul className="nes-list is-circle">
-          {this.state.decisions.map((d, index) => <li key={index}>{d}</li>)}
+          {this.state.decisions.length === 0 ? 
+          'No hay que decicidir': 
+          this.state.decisions.map((d, index)=>
+          <li key={index}>{d} <button className="nes-btn is-error" onClick={this.deleteOne}>X</button></li>)}
         </ul>
       </div>
-        <label htmlFor="name_field">Write a decisison</label>
+        <label htmlFor="name_field">Escribe una opcion...</label>
         <input type="text" id="name_field" placeholder='...' className="nes-input" onKeyPress={this.addDecision}/>
     </div>
-    </>
+    </div>
    )
   }
 }
